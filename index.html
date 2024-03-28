@@ -1,42 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hw10-try</title>
-    <style>
-      .loader {
-        display: none;
-      }
-      .error {
-        display: none;
-      }
-      .cat-info {
-        display: flex;
-        justify-content: space-between;
-      }
-      .cat-dscr-ttl {
-        font-size: 32px;
-      }
-      .dscr-div {
-        max-width: 45%;
-      }
-      .cat-img {
-        max-width: 50%;
-        object-fit: contain;
-      }
-    </style>
-  </head>
-  <body>
-    <select class="breed-select">
-      <option value="" disabled selected>Please, choose breed</option>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat-Api-v2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <select name="breed-select" id="breed-select">
+        <option value="placeholder" disabled selected>Please select breed...</option>
     </select>
-    <p class="loader">Loading data, please wait...</p>
-    <p class="error">Oops! Something went wrong! Try reloading the page!</p>
-    <div class="cat-info">
-      
+    <p class="load-msg">Loading data...</p>
+    <p class="err-msg">Error, something get wrong :- (</p>
+    <div class="cat-info-div">
     </div>
 
-    <script src="index.js" type="module"></script>
-  </body>
+    <script src="index.js"></script>
+</body>
 </html>

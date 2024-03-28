@@ -1,79 +1,62 @@
 "use strict";
 
 const BASE_URL = "https://api.thecatapi.com/v1";
-const API_KEY = "live_Pf6TQswVRH9Evu1FuMHlfi9EJTbLroUshBofydxVS09W8oeXeopbTSN55FiZAFCA";
-const loaderMess = document.querySelector('.loader');
-const breedSelect = document.querySelector(".breed-select");
-const catInfo = document.querySelector('.cat-info');
-const errorMess = document.querySelector('.error');
+const loader = document.querySelector('.load-msg');
+const err = document.querySelector('.err-msg');
+const select = document.querySelector('#breed-select');
+const infoDiv = document.querySelector('.cat-info-div');
 
-//show loader / hide select 
-loaderMess.style.display = "block";
-breedSelect.style.display = "none";
-
-//fetchData async function
-const fetchData = async (url) => {
+const fetchDATA = async (url) => {
     try {
-        const response = await fetch(url);
-        return await response.json();
+        const response = await fetch(BASE_URL + url);
+        return await response.json()
     } catch (error) {
-        throw new Error(`FetchData function Error: ${error}`);
+        throw new Error(`ERROR fetchURL: ${error}`)
     }
 };
-
-// async fetchBreeds
-// breeds get by fetchData /breeds
-// breeds map to gen and insert options
-// change loader to breedSelect by style
-// catch with change loader to err and clg
 
 const fetchBreeds = async () => {
     try {
-        const breeds = await fetchData(BASE_URL + '/breeds');
+        // select.style.display = "none";
+        loader.style.display = "block";
         
-        const breeds_markup = breeds.map(breed => `<option value="${breed.id}|${breed.name}|${breed.description}">${breed.name}</option>`).join("");
-        breedSelect.insertAdjacentHTML("beforeend", breeds_markup);
-    
-        loaderMess.style.display = "none";
-        breedSelect.style.display = "block";
+        const breeds = await fetchDATA("/breeds");
+        const selectMarkup = breeds.map(breed => `<option value="${breed.id}|${breed.name}|${breed.description}">${breed.name}</option>`).join("")
+        select.insertAdjacentHTML("beforeend", selectMarkup)
+        // console.log(breeds[0])
+        loader.style.display = "none";
+        select.style.display = "block";
     } catch (error) {
-        loaderMess.style.display = "none";
-        errorMess.style.display = "block";
-        throw new Error(`FetchBreeds function Error: ${error}`);
+        select.style.display = "none";
+        loader.style.display = "none";
+        err.style.display = "block";
+        throw new Error(`ERROR fetchBreeds: ${error}`)
     }
-    
 }
 
-/* Async fnc fetchCatByBreed with value args. Hide loader, get img by id, create .cat-info markup and insert. Catch error and view/hide needed tags  */
+const fetchCatInfo = async(breedId, breedName, breedDscr) => {
+    loader.style.display = "block";
+    try {
+             const catImg = await fetchDATA(`/images/search?breed_ids=${breedId}`);
+        // console.log(catImg)
+        const catInfoMarkup = `
+        <div class="text-div">
+        <p class="info-ttl">${breedName}</p>
+        <p class="info-dscr">${breedDscr}</p>
+        </div>
+        <img src="${catImg[0].url}" alt="" class="info-img">`
+        
+        loader.style.display = "none";
+        infoDiv.insertAdjacentHTML("beforeend",catInfoMarkup)
+    } catch (error) {
+        throw new Error(`ERROR fetchCatInfo ${error}`)
+    }
+}
 
-const fetchCatByBreed = async (breedId, breedName, breedDsc) => {
-  loaderMess.style.display = "block";
-  try {
-    const catImage = await fetchData(BASE_URL + `/images1/search?breed_ids=${breedId}`);
-    
-    const descriptionMarkup = `
-      <div class="dscr-div">
-      <h3 class="cat-dscr-ttl">= ${breedName} =</h3>
-      <p class="cat-dscr">${breedDsc}</p>
-      </div>
-      <img class="cat-img" src="${catImage[0].url}">
-    `;
-
-    catInfo.innerHTML = descriptionMarkup;
-    loaderMess.style.display = "none";    
-  } catch (error) {
-    loaderMess.style.display = "none";    
-    errorMess.style.display = "block";
-    throw new Error(`FetchCatByBreed function Error: ${error}`)
-  }
-};
-
-/* Add event listener to select tag change. Split chosen option value. Clear .catInfo. Do fetch by breed */
-
-breedSelect.addEventListener("change", async (event) => {
-  const [breedId, breedName, breedDsc] = event.target.value.split("|");
-  catInfo.innerHTML = "";
-  await fetchCatByBreed(breedId, breedName, breedDsc);
-});
+select.addEventListener("change", async (event) => {
+    const [breedId, breedName, breedDscr] = event.target.value.split("|");
+    infoDiv.innerHTML = "";
+    await fetchCatInfo(breedId, breedName, breedDscr);    
+})
 
 fetchBreeds()

@@ -32,4 +32,8 @@ max-width: 95%;
 }
 #breed-select {
     display: none;
+    width: 200px;
+}
+.search-input {
+    width: 175px;
 }

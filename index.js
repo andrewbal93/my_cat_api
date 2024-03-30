@@ -15,15 +15,13 @@ const fetchDATA = async (url) => {
     }
 };
 
-const fetchBreeds = async () => {
+(async () => {
     try {
-        // select.style.display = "none";
         loader.style.display = "block";
         
         const breeds = await fetchDATA("/breeds");
         const selectMarkup = breeds.map(breed => `<option value="${breed.id}|${breed.name}|${breed.description}">${breed.name}</option>`).join("")
         select.insertAdjacentHTML("beforeend", selectMarkup)
-        // console.log(breeds[0])
         loader.style.display = "none";
         select.style.display = "block";
     } catch (error) {
@@ -32,13 +30,12 @@ const fetchBreeds = async () => {
         err.style.display = "block";
         throw new Error(`ERROR fetchBreeds: ${error}`)
     }
-}
+})();
 
 const fetchCatInfo = async(breedId, breedName, breedDscr) => {
     loader.style.display = "block";
     try {
              const catImg = await fetchDATA(`/images/search?breed_ids=${breedId}`);
-        // console.log(catImg)
         const catInfoMarkup = `
         <div class="text-div">
         <p class="info-ttl">${breedName}</p>
@@ -58,5 +55,3 @@ select.addEventListener("change", async (event) => {
     infoDiv.innerHTML = "";
     await fetchCatInfo(breedId, breedName, breedDscr);    
 })
-
-fetchBreeds()

@@ -78,12 +78,5 @@ searchInput.addEventListener('input', () => {
 });
 
 searchInput.addEventListener("keydown", (event) => {
-    if (event.keyCode === 40) {
-        const key = new KeyboardEvent('keydown', {
-            key: 'ArrowDown', 
-            keyCode: 40,
-            which: 40
-        });
-        select.focus();
-    };
+    if (event.keyCode === 40) select.focus();
 });

@@ -33,7 +33,12 @@ max-width: 95%;
 #breed-select {
     display: none;
     width: 200px;
+    margin-left: 10px;
+    border-radius: 3px;
 }
 .search-input {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 10px;
     width: 175px;
 }

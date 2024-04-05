@@ -48,6 +48,7 @@ const fetchCatInfo = async(breedId, breedName, breedDscr) => {
         <img src="${catImg[0].url}" alt="" class="info-img">`
         
         loader.style.display = "none";
+        infoDiv.innerHTML = "";
         infoDiv.insertAdjacentHTML("beforeend",catInfoMarkup)
     } catch (error) {
         throw new Error(`ERROR fetchCatInfo ${error}`)
@@ -55,8 +56,8 @@ const fetchCatInfo = async(breedId, breedName, breedDscr) => {
 }
 
 select.addEventListener("change", async (event) => {
-    const [breedId, breedName, breedDscr] = event.target.value.split("|");
     infoDiv.innerHTML = "";
+    const [breedId, breedName, breedDscr] = event.target.value.split("|");
     await fetchCatInfo(breedId, breedName, breedDscr);    
 })
 searchInput.addEventListener('input', () => {
